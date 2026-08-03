@@ -1,6 +1,6 @@
 {
   "name": "@me9rez/llm-vision-mcp",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "给文本模型装上眼睛 — MCP Server + OpenAI 兼容视觉模型（默认通义千问VL via ModelScope），图片文件 → 视觉模型 → 文字描述 / Give text-only LLMs vision via any OpenAI-compatible vision model",
   "type": "module",
   "main": "index.js",
