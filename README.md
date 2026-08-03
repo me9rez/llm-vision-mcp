@@ -23,7 +23,7 @@
 > 2. 右上角头像 → 个人中心 → 访问令牌（或直接访问 https://modelscope.cn/my/myaccesstoken）
 > 3. 首次使用需绑定阿里云账号（必须，按页面引导完成）
 > 4. 点击"新建访问令牌" → 命名 → 生成 → 复制
-> 5. 令牌格式为 `ms-xxxxxxxxxxxx`，使用时**去掉 `ms-` 前缀**！
+> 5. 令牌格式为 `ms-xxxxxxxxxxxx`，**保留 `ms-` 前缀**原样作为 `API_KEY` 使用
 
 ```bash
 # 验证可用性（启动 stdio MCP Server，Ctrl+C 退出）
@@ -216,7 +216,7 @@ TOOLS=understand_diagram,analyze_chart
 
 | 变量 | 必填 | 默认值 | 说明 |
 |------|------|--------|------|
-| `API_KEY` | 是 | - | 供应商密钥（ModelScope 令牌需**去掉 `ms-` 前缀**） |
+| `API_KEY` | 是 | - | 供应商密钥（ModelScope 令牌**保留 `ms-` 前缀**原样使用） |
 | `BASE_URL` | 否 | `https://api-inference.modelscope.cn/v1` | OpenAI 兼容接口地址，可替换为任意供应商 |
 | `VISION_MODEL` | 否 | `Qwen/Qwen3-VL-8B-Instruct` | 视觉模型名（如 `Qwen/Qwen3-VL-235B-A22B-Instruct`） |
 | `TEMPERATURE` | 否 | `0.7` | 采样温度（数字，如 `0` / `0.5`） |

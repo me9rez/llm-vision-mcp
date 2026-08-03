@@ -52,7 +52,7 @@ ${commands}
   （下划线可替换为短横线，如 extract-text）
 
 环境变量:
-  API_KEY        供应商密钥（必填；ModelScope 令牌去掉 ms- 前缀）
+  API_KEY        供应商密钥（必填；ModelScope 令牌保留 ms- 前缀）
   BASE_URL       接口地址（默认 https://api-inference.modelscope.cn/v1）
   VISION_MODEL   模型名（默认 Qwen/Qwen3-VL-8B-Instruct）
   TEMPERATURE    采样温度（默认 0.7）

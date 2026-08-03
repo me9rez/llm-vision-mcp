@@ -41,8 +41,8 @@ export const API_KEY_MESSAGE = `❌ 未设置 API_KEY 环境变量。
 4. TEMPERATURE=0.7 / MAX_TOKENS=8192 （可选调参）
 
 ModelScope 免费 Key（每天2000次，单模型500次）：https://modelscope.cn/my/myaccesstoken
-⚠️ 令牌格式为 ms-xxxxxxxx，使用时去掉 ms- 前缀！
+⚠️ 令牌格式为 ms-xxxxxxxx，直接原样使用（保留 ms- 前缀）！
 
 API_KEY not set. Set API_KEY, BASE_URL and VISION_MODEL to use any
 OpenAI-compatible vision provider. Free ModelScope key:
-https://modelscope.cn/my/myaccesstoken (2000 calls/day, remove ms- prefix).`;
+https://modelscope.cn/my/myaccesstoken (2000 calls/day, keep the ms- prefix).`;
