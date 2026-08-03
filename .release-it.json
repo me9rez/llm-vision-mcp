@@ -9,7 +9,7 @@
   "github": {
     "release": true,
     "releaseNotes": {
-      "commit": "* ${commit.subject} (${commit.sha.slice(0, 7)})"
+      "commit": "* ${commit.subject} (${sha.slice(0, 7)})"
     },
     "proxy": "http://127.0.0.1:7890"
   },
