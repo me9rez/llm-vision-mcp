@@ -47,13 +47,13 @@ DeepSeek / Claude Code / Opencode
 # ④ 点击"新建访问令牌" → 命名 → 生成 → 复制
 # ⑤ 令牌格式为 ms-xxxxxxxxxxxx，使用时去掉 ms- 前缀！
 
-# 验证可用性（会启动 stdio 服务，Ctrl+C 退出）
-npx -y @me9rez/llm-vision-mcp
+# 验证可用性：启动 MCP Server（stdio，Ctrl+C 退出）
+npx -y @me9rez/llm-vision-mcp mcp
 # 或 pnpm
-pnpm dlx @me9rez/llm-vision-mcp
+pnpm dlx @me9rez/llm-vision-mcp mcp
 ```
 
-然后按下方「客户端配置」把 MCP Server 接入 Claude Code / Opencode，在 `env` 中注入 `API_KEY` 即可。
+然后按下方「客户端配置」把 MCP Server 接入 Claude Code / Opencode，在 `env` 中注入 `API_KEY` 即可。也可以直接用 CLI 分析图片（见下方「🖥️ CLI 使用」）。
 
 ### 🧑‍💻 本地开发
 
@@ -65,17 +65,43 @@ npm test         # 单元测试
 npm run smoke    # 冒烟测试（无需 API Key）
 ```
 
+## 🖥️ CLI 使用
+
+不接 MCP 客户端时，也可以在终端直接分析图片：
+
+```bash
+# 查看帮助（列出全部命令与环境变量）
+npx -y @me9rez/llm-vision-mcp --help
+
+# 分析图片（默认通用分析提示词）
+npx -y @me9rez/llm-vision-mcp analyze_image ./图片.png
+
+# 带自定义问题
+npx -y @me9rez/llm-vision-mcp analyze_image ./图片.png "描述图片中的颜色和字体"
+
+# 其他命令：extract_text（OCR）、describe_ui、diagnose_error、
+#          understand_diagram、analyze_chart、code_from_screenshot
+# 下划线可替换为短横线（如 extract-text），效果相同
+
+# 启动 MCP Server（stdio 模式）
+npx -y @me9rez/llm-vision-mcp mcp
+```
+
+```bash
+API_KEY=你的密钥 npx -y @me9rez/llm-vision-mcp analyze_image ./图片.png
+```
+
 ## 📋 MCP 工具列表
 
 | 工具 | 功能 |
 |------|------|
 | `analyze_image` | 分析磁盘图片文件（可传自定义 `prompt`） |
 | `extract_text` | 磁盘图片 OCR 提取文字 |
-| `describe_ui` | 分析磁盘 UI 截图 |
-| `diagnose_error` | 诊断磁盘错误截图 |
+| `describe_ui` | 分析磁盘 UI 图片 |
+| `diagnose_error` | 诊断磁盘错误图片 |
 | `understand_diagram` | 解读流程图/架构图 |
 | `analyze_chart` | 分析数据图表 |
-| `code_from_screenshot` | 磁盘代码截图提取代码 |
+| `code_from_screenshot` | 从磁盘图片提取代码 |
 
 ## 🔌 客户端配置
 
@@ -86,7 +112,7 @@ npm run smoke    # 冒烟测试（无需 API Key）
   "mcpServers": {
     "llm-vision-mcp": {
       "command": "npx",
-      "args": ["-y", "@me9rez/llm-vision-mcp"],
+      "args": ["-y", "@me9rez/llm-vision-mcp", "mcp"],
       "env": {
         "API_KEY": "你的_API_Key"
       }
@@ -95,8 +121,26 @@ npm run smoke    # 冒烟测试（无需 API Key）
 }
 ```
 
-> ⚠️ Windows 下如 `npx` 无法直接启动，可将 `command` 改为 `npx.cmd`，或使用 `"command": "cmd", "args": ["/c", "npx", "-y", "@me9rez/llm-vision-mcp"]`。
+> ⚠️ Windows 下如 `npx` 无法直接启动，可将 `command` 改为 `npx.cmd`，或使用 `"command": "cmd", "args": ["/c", "npx", "-y", "@me9rez/llm-vision-mcp", "mcp"]`。
 > 完整示例见 `examples/claude_code_settings.json`。
+
+**只启用部分工具**（减少 agent 上下文占用，`TOOLS` 与 `--tools` 二选一）：
+
+```json
+{
+  "mcpServers": {
+    "llm-vision-mcp": {
+      "command": "npx",
+      "args": ["-y", "@me9rez/llm-vision-mcp", "mcp", "--tools", "analyze_image,extract_text"],
+      "env": {
+        "API_KEY": "你的_API_Key"
+      }
+    }
+  }
+}
+```
+
+或通过 env 注入：`"env": { "API_KEY": "…", "TOOLS": "analyze_image,extract_text" }`。工具名支持 `-` 代替 `_`（如 `extract-text`）。
 
 **Opencode**（`%APPDATA%\opencode\opencode.json`）：
 
@@ -105,7 +149,7 @@ npm run smoke    # 冒烟测试（无需 API Key）
   "mcp": {
     "llm-vision-mcp": {
       "type": "local",
-      "command": ["npx", "-y", "@me9rez/llm-vision-mcp"],
+      "command": ["npx", "-y", "@me9rez/llm-vision-mcp", "mcp"],
       "enabled": true,
       "environment": {
         "API_KEY": "你的_API_Key"
@@ -126,8 +170,9 @@ npm run smoke    # 冒烟测试（无需 API Key）
 | `API_KEY` | 是 | - | 供应商密钥（ModelScope 令牌需**去掉 `ms-` 前缀**） |
 | `BASE_URL` | 否 | `https://api-inference.modelscope.cn/v1` | OpenAI 兼容接口地址，可替换为任意供应商 |
 | `VISION_MODEL` | 否 | `Qwen/Qwen3-VL-8B-Instruct` | 视觉模型名（如 `Qwen/Qwen3-VL-235B-A22B-Instruct`） |
-| `TEMPERATURE` | 否 | `0.3` | 采样温度（数字，如 `0` / `0.5`） |
+| `TEMPERATURE` | 否 | `0.7` | 采样温度（数字，如 `0` / `0.5`） |
 | `MAX_TOKENS` | 否 | `32768` | 最大生成长度（正整数） |
+| `TOOLS` | 否 | （全部） | 启用工具白名单，逗号分隔（如 `analyze_image,extract_text`）；留空启用全部。**仅影响 MCP 模式**，用于减少 agent 上下文占用 |
 
 **配置其他供应商示例**（如本地 Ollama / vLLM 部署）：
 
@@ -136,13 +181,13 @@ npm run smoke    # 冒烟测试（无需 API Key）
   "mcpServers": {
     "llm-vision-mcp": {
       "command": "npx",
-      "args": ["-y", "@me9rez/llm-vision-mcp"],
+      "args": ["-y", "@me9rez/llm-vision-mcp", "mcp"],
       "env": {
         "API_KEY": "sk-xxx",
         "BASE_URL": "http://localhost:8000/v1",
         "VISION_MODEL": "qwen2.5-vl-7b",
         "TEMPERATURE": "0.2",
-        "MAX_TOKENS": "4096"
+        "MAX_TOKENS": "32768"
       }
     }
   }

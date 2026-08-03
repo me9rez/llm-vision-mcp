@@ -56,7 +56,7 @@ describe("VisionClient.analyze", () => {
 
     const args = createMock.mock.calls[0][0];
     expect(args.model).toBe(VISION_MODEL);
-    expect(args.temperature).toBe(0.3);
+    expect(args.temperature).toBe(0.7);
     expect(args.max_tokens).toBe(32768);
     expect(args.messages).toEqual([
       {
@@ -140,12 +140,12 @@ describe("VisionClient.analyze", () => {
     };
     process.env.BASE_URL = "http://localhost:8000/v1";
     process.env.TEMPERATURE = "0";
-    process.env.MAX_TOKENS = "4096";
+    process.env.MAX_TOKENS = "32768";
     try {
       const { VisionClient, BASE_URL, TEMPERATURE, MAX_TOKENS } = await load();
       expect(BASE_URL).toBe("http://localhost:8000/v1");
       expect(TEMPERATURE).toBe(0);
-      expect(MAX_TOKENS).toBe(4096);
+      expect(MAX_TOKENS).toBe(32768);
 
       createMock.mockResolvedValue({ choices: [{ message: { content: "ok" } }] });
       const p = path.join(dir, "sample.png");
@@ -158,7 +158,7 @@ describe("VisionClient.analyze", () => {
       });
       const args = createMock.mock.calls[0][0];
       expect(args.temperature).toBe(0);
-      expect(args.max_tokens).toBe(4096);
+      expect(args.max_tokens).toBe(32768);
     } finally {
       for (const [k, v] of Object.entries(prev)) {
         if (v === undefined) delete process.env[k];
@@ -173,7 +173,7 @@ describe("VisionClient.analyze", () => {
     process.env.MAX_TOKENS = "-5";
     try {
       const { TEMPERATURE, MAX_TOKENS } = await load();
-      expect(TEMPERATURE).toBe(0.3);
+      expect(TEMPERATURE).toBe(0.7);
       expect(MAX_TOKENS).toBe(32768);
     } finally {
       for (const [k, v] of Object.entries(prev)) {

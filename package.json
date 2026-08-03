@@ -6,15 +6,14 @@
   "main": "index.js",
   "files": [
     "index.js",
-    "README.md",
-    ".env.example",
-    "examples/"
+    "src/",
+    "README.md"
   ],
   "bin": {
     "llm-vision-mcp": "index.js"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "node index.js mcp",
     "smoke": "vitest run tests/smoke.test.mjs",
     "test": "vitest run"
   },
@@ -31,7 +30,7 @@
     "deepseek",
     "opencode"
   ],
-  "author": "llm-vision-mcp",
+  "author": "me9rez",
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.0",

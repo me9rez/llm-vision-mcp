@@ -11,12 +11,15 @@
 
 import "dotenv/config";
 import { runMcpServer } from "./src/mcp.js";
-import { runCli } from "./src/cli.js";
+import { runCli, parseArgs } from "./src/cli.js";
+import { TOOLS } from "./src/config.js";
 
 const [mode, ...rest] = process.argv.slice(2);
 
 if (mode === "mcp") {
-  runMcpServer().catch((err) => {
+  // --tools 参数优先，TOOLS 环境变量兜底
+  const { flags } = parseArgs(rest);
+  runMcpServer({ tools: flags.tools ?? TOOLS }).catch((err) => {
     console.error(`[llm-vision-mcp] 启动失败: ${err}`);
     process.exit(1);
   });

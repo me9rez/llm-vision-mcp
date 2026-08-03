@@ -7,7 +7,7 @@ import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { SERVER_NAME, SERVER_VERSION, API_KEY, API_KEY_MESSAGE } from "./config.js";
 import { VisionClient } from "./vision.js";
-import { TOOL_DEFS, PROMPTS } from "./tools.js";
+import { PROMPTS, filterToolDefs } from "./tools.js";
 
 let visionClient = null;
 
@@ -25,10 +25,11 @@ function handleError(e) {
   return { content: [{ type: "text", text: `错误: ${e.message ?? e}` }] };
 }
 
-export function createMcpServer() {
+export function createMcpServer({ tools } = {}) {
   const server = new McpServer({ name: SERVER_NAME, version: SERVER_VERSION });
+  const defs = filterToolDefs(tools);
 
-  for (const def of TOOL_DEFS) {
+  for (const def of defs) {
     const inputSchema = def.supportsPrompt
       ? {
           image_path: z.string().describe("图片路径"),
@@ -58,12 +59,12 @@ export function createMcpServer() {
   return server;
 }
 
-export async function runMcpServer() {
+export async function runMcpServer({ tools } = {}) {
   if (API_KEY) {
     setVisionClient(new VisionClient(API_KEY));
   }
 
-  const server = createMcpServer();
+  const server = createMcpServer({ tools });
   const transport = new StdioServerTransport();
   await server.connect(transport);
 }

@@ -1,11 +1,17 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { createMcpServer, setVisionClient } from "../src/mcp.js";
-import { PROMPTS, TOOL_DEFS } from "../src/tools.js";
+import { PROMPTS, TOOL_DEFS, filterToolDefs } from "../src/tools.js";
 import { SERVER_NAME, SERVER_VERSION } from "../src/config.js";
 
 const EXPECTED_TOOLS = TOOL_DEFS.map((d) => d.name);
 
 describe("服务与工具注册", () => {
+  let server;
+
+  beforeEach(() => {
+    server = createMcpServer();
+  });
+
   it("服务名与版本正确", () => {
     expect(SERVER_NAME).toBe("llm-vision-mcp");
     expect(SERVER_VERSION).toBe("1.0.0");
@@ -47,9 +53,11 @@ describe("服务与工具注册", () => {
 });
 
 describe("工具回调", () => {
+  let server;
   const mockAnalyze = vi.fn();
 
   beforeEach(() => {
+    server = createMcpServer();
     setVisionClient({ analyze: mockAnalyze });
   });
 
@@ -105,5 +113,54 @@ describe("工具回调", () => {
     mockAnalyze.mockRejectedValue(new Error("boom"));
     const res = await server._registeredTools.analyze_image.handler({ image_path: "/x.png" });
     expect(res.content[0].text).toBe("错误: boom");
+  });
+});
+
+describe("工具过滤 (filterToolDefs / parseToolsList)", () => {
+  it("未配置时启用全部工具", () => {
+    expect(filterToolDefs(null)).toHaveLength(TOOL_DEFS.length);
+    expect(filterToolDefs("")).toHaveLength(TOOL_DEFS.length);
+    expect(filterToolDefs(undefined)).toHaveLength(TOOL_DEFS.length);
+  });
+
+  it("逗号分隔白名单（容忍空白）", () => {
+    const defs = filterToolDefs("analyze_image, extract_text");
+    expect(defs.map((d) => d.name)).toEqual(["analyze_image", "extract_text"]);
+  });
+
+  it("kebab-case 自动映射为 snake_case", () => {
+    const defs = filterToolDefs("extract-text");
+    expect(defs.map((d) => d.name)).toEqual(["extract_text"]);
+  });
+
+  it("未知名称被忽略并输出警告", () => {
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    try {
+      const defs = filterToolDefs("analyze_image,foobar");
+      expect(defs.map((d) => d.name)).toEqual(["analyze_image"]);
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("foobar"));
+    } finally {
+      warnSpy.mockRestore();
+    }
+  });
+});
+
+describe("createMcpServer 工具白名单", () => {
+  it("按配置只注册指定工具", () => {
+    const server = createMcpServer({ tools: "analyze_image" });
+    expect(Object.keys(server._registeredTools)).toEqual(["analyze_image"]);
+  });
+
+  it("配置多个工具时按序注册", () => {
+    const server = createMcpServer({ tools: "extract_text,analyze_image" });
+    expect(Object.keys(server._registeredTools).sort()).toEqual([
+      "analyze_image",
+      "extract_text",
+    ]);
+  });
+
+  it("未配置时注册全部工具", () => {
+    const server = createMcpServer();
+    expect(Object.keys(server._registeredTools)).toHaveLength(TOOL_DEFS.length);
   });
 });
