@@ -17,7 +17,8 @@
     "smoke": "vitest run tests/smoke.test.mjs",
     "test": "vitest run",
     "release": "release-it",
-    "release:dry": "release-it --dry-run"
+    "release:dry": "release-it --dry-run",
+    "preview:hero": "node scripts/render-svg.js"
   },
   "engines": {
     "node": ">=18"
