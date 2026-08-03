@@ -8,7 +8,9 @@
   },
   "github": {
     "release": true,
-    "autoGenerate": true,
+    "releaseNotes": {
+      "commit": "* ${commit.subject} (${commit.sha.slice(0, 7)})"
+    },
     "proxy": "http://127.0.0.1:7890"
   },
   "npm": {
