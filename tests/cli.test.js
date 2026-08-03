@@ -98,7 +98,7 @@ describe("runCli", () => {
   it("--version 打印版本并返回 0", async () => {
     const code = await runCli(["--version"]);
     expect(code).toBe(0);
-    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining("v1.0.0"));
+    expect(logSpy).toHaveBeenCalledWith(expect.stringContaining("v0.0.1"));
   });
 
   it("成功分析图片并输出模型文本", async () => {

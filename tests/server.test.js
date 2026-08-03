@@ -14,7 +14,7 @@ describe("服务与工具注册", () => {
 
   it("服务名与版本正确", () => {
     expect(SERVER_NAME).toBe("llm-vision-mcp");
-    expect(SERVER_VERSION).toBe("1.0.0");
+    expect(SERVER_VERSION).toBe("0.0.1");
   });
 
   it("注册了全部 7 个磁盘图片工具", () => {

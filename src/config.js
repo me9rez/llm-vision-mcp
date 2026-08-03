@@ -3,7 +3,7 @@
  */
 
 export const SERVER_NAME = "llm-vision-mcp";
-export const SERVER_VERSION = "1.0.0";
+export const SERVER_VERSION = "0.0.1";
 
 // 通用 OpenAI 兼容供应商配置（均可通过环境变量覆盖）
 export const DEFAULT_MODEL = "Qwen/Qwen3-VL-8B-Instruct";
