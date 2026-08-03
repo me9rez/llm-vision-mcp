@@ -15,7 +15,9 @@
   "scripts": {
     "start": "node index.js mcp",
     "smoke": "vitest run tests/smoke.test.mjs",
-    "test": "vitest run"
+    "test": "vitest run",
+    "release": "release-it",
+    "release:dry": "release-it --dry-run"
   },
   "engines": {
     "node": ">=18"
@@ -40,6 +42,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "release-it": "^21.0.1",
     "vitest": "^4.1.10"
   }
 }
