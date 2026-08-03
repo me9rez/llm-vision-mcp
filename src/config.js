@@ -17,7 +17,7 @@ export const TEMPERATURE = (() => {
 })();
 export const MAX_TOKENS = (() => {
   const n = Number.parseInt(process.env.MAX_TOKENS, 10);
-  return Number.isInteger(n) && n > 0 ? n : 32768;
+  return Number.isInteger(n) && n > 0 ? n : 8192;
 })();
 
 // 安全检查
@@ -38,7 +38,7 @@ export const API_KEY_MESSAGE = `❌ 未设置 API_KEY 环境变量。
 1. API_KEY=你的密钥
 2. BASE_URL=接口地址 （默认 https://api-inference.modelscope.cn/v1）
 3. VISION_MODEL=模型名 （默认 Qwen/Qwen3-VL-8B-Instruct）
-4. TEMPERATURE=0.7 / MAX_TOKENS=32768 （可选调参）
+4. TEMPERATURE=0.7 / MAX_TOKENS=8192 （可选调参）
 
 ModelScope 免费 Key（每天2000次，单模型500次）：https://modelscope.cn/my/myaccesstoken
 ⚠️ 令牌格式为 ms-xxxxxxxx，使用时去掉 ms- 前缀！

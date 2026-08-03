@@ -220,7 +220,7 @@ TOOLS=understand_diagram,analyze_chart
 | `BASE_URL` | 否 | `https://api-inference.modelscope.cn/v1` | OpenAI 兼容接口地址，可替换为任意供应商 |
 | `VISION_MODEL` | 否 | `Qwen/Qwen3-VL-8B-Instruct` | 视觉模型名（如 `Qwen/Qwen3-VL-235B-A22B-Instruct`） |
 | `TEMPERATURE` | 否 | `0.7` | 采样温度（数字，如 `0` / `0.5`） |
-| `MAX_TOKENS` | 否 | `32768` | 最大生成长度（正整数） |
+| `MAX_TOKENS` | 否 | `8192` | 最大生成长度（正整数） |
 | `TOOLS` | 否 | （全部） | 工具白名单，逗号分隔（如 `analyze_image,extract_text`）；留空启用全部。**仅影响 MCP 模式**，详见「工具白名单」 |
 
 **配置其他供应商示例**（如本地 Ollama / vLLM 部署）：
@@ -236,7 +236,7 @@ TOOLS=understand_diagram,analyze_chart
         "BASE_URL": "http://localhost:8000/v1",
         "VISION_MODEL": "qwen2.5-vl-7b",
         "TEMPERATURE": "0.2",
-        "MAX_TOKENS": "32768"
+        "MAX_TOKENS": "8192"
       }
     }
   }

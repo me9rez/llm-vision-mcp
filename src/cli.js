@@ -56,7 +56,7 @@ ${commands}
   BASE_URL       接口地址（默认 https://api-inference.modelscope.cn/v1）
   VISION_MODEL   模型名（默认 Qwen/Qwen3-VL-8B-Instruct）
   TEMPERATURE    采样温度（默认 0.7）
-  MAX_TOKENS     最大生成长度（默认 32768）
+  MAX_TOKENS     最大生成长度（默认 8192）
   TOOLS          启用工具白名单（逗号分隔，如 analyze_image,extract_text；
                  留空=全部，仅 MCP 模式生效，减少 agent 上下文占用）`;
 }

@@ -57,7 +57,7 @@ describe("VisionClient.analyze", () => {
     const args = createMock.mock.calls[0][0];
     expect(args.model).toBe(VISION_MODEL);
     expect(args.temperature).toBe(0.7);
-    expect(args.max_tokens).toBe(32768);
+    expect(args.max_tokens).toBe(8192);
     expect(args.messages).toEqual([
       {
         role: "user",
@@ -174,7 +174,7 @@ describe("VisionClient.analyze", () => {
     try {
       const { TEMPERATURE, MAX_TOKENS } = await load();
       expect(TEMPERATURE).toBe(0.7);
-      expect(MAX_TOKENS).toBe(32768);
+      expect(MAX_TOKENS).toBe(8192);
     } finally {
       for (const [k, v] of Object.entries(prev)) {
         if (v === undefined) delete process.env[k];
