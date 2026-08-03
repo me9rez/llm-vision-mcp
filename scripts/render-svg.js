@@ -10,7 +10,7 @@
  */
 
 import { spawnSync } from "node:child_process";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync, rmSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
@@ -41,14 +41,29 @@ if (!existsSync(svgPath)) {
   process.exit(1);
 }
 
+export function parseSvgSize(svgText) {
+  /** 从 SVG 根元素解析 width/height（或 viewBox 后两个值），供 Edge 窗口尺寸使用。 */
+  const dim = svgText.match(
+    /<svg[^>]*\bwidth\s*=\s*["']?(\d+(?:\.\d+)?)["']?\s+height\s*=\s*["']?(\d+(?:\.\d+)?)["']?/
+  );
+  if (dim) return { width: Math.round(+dim[1]), height: Math.round(+dim[2]) };
+  const vb = svgText.match(/viewBox\s*=\s*["'][\d.]+ [\d.]+ (\d+(?:\.\d+)?) (\d+(?:\.\d+)?)["']/);
+  if (vb) return { width: Math.round(+vb[1]), height: Math.round(+vb[2]) };
+  return null;
+}
+
 const url = `file:///${svgPath.replace(/\\/g, "/")}`;
+const size = parseSvgSize(readFileSync(svgPath, "utf8"));
+const winW = size?.width ?? 1200;
+const winH = size?.height ?? 360;
+rmSync(outPath, { force: true }); // 先删旧文件，避免轮询误判为已生成
 const result = spawnSync(
   edge,
   [
     "--headless=new",
     "--disable-gpu",
     "--hide-scrollbars",
-    `--window-size=1200,360`,
+    `--window-size=${winW},${winH}`,
     `--screenshot=${outPath}`,
     url,
   ],
