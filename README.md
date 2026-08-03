@@ -1,10 +1,10 @@
-# llm-vision-mcp 👁️
+# llm-vision-mcp
 
 <p align="center">
   <img src="./assets/readme/hero.svg" width="100%" alt="llm-vision-mcp — 给文本模型装上眼睛：图片文件 → MCP → 视觉模型 → 文字描述，DeepSeek 也能看见">
 </p>
 
-## 📌 这是什么？
+## 这是什么？
 
 通过 MCP stdio 协议为文本模型提供图片理解能力的本地服务，专注磁盘图片分析：
 
@@ -14,7 +14,7 @@
 
 **为什么需要？** DeepSeek / GLM 等文本模型的 API 没有视觉能力——给它一个图片路径，它只能"看到"路径本身。本 MCP Server 把图片转成文字描述，让文本模型也能"看图说话"。
 
-## ⚡ 快速开始
+## 快速开始
 
 已发布到 npm，**无需克隆仓库**，客户端会通过 `npx` / `pnpm dlx` 自动下载运行：
 
@@ -32,9 +32,9 @@ npx -y @me9rez/llm-vision-mcp mcp
 pnpm dlx @me9rez/llm-vision-mcp mcp
 ```
 
-然后按下方「客户端配置」把 MCP Server 接入 Claude Code / Opencode / Kimi Code，在 `env` 中注入 `API_KEY` 即可；也可以直接用 CLI 分析图片（见「🖥️ CLI 使用」）。
+然后按下方「客户端配置」把 MCP Server 接入 Claude Code / Opencode / Kimi Code，在 `env` 中注入 `API_KEY` 即可；也可以直接用 CLI 分析图片（见「CLI 使用」）。
 
-### 🧑‍💻 本地开发
+### 本地开发
 
 ```bash
 git clone <仓库地址> && cd llm-vision-mcp
@@ -44,7 +44,7 @@ npm test         # 单元测试
 npm run smoke    # 冒烟测试（无需 API Key）
 ```
 
-## 🖥️ CLI 使用
+## CLI 使用
 
 不接 MCP 客户端时，也可以在终端直接分析图片：
 
@@ -70,7 +70,7 @@ npx -y @me9rez/llm-vision-mcp mcp
 API_KEY=你的密钥 npx -y @me9rez/llm-vision-mcp analyze_image ./图片.png
 ```
 
-## 📋 MCP 工具列表
+## MCP 工具列表
 
 | 工具 | 功能 |
 |------|------|
@@ -82,7 +82,7 @@ API_KEY=你的密钥 npx -y @me9rez/llm-vision-mcp analyze_image ./图片.png
 | `analyze_chart` | 分析数据图表 |
 | `code_from_screenshot` | 从磁盘图片提取代码 |
 
-## 🔌 客户端配置
+## 客户端配置
 
 **Claude Code**（`.claude/settings.json`）：
 
@@ -103,7 +103,7 @@ API_KEY=你的密钥 npx -y @me9rez/llm-vision-mcp analyze_image ./图片.png
 > ⚠️ Windows 下如 `npx` 无法直接启动，可将 `command` 改为 `npx.cmd`，或使用 `"command": "cmd", "args": ["/c", "npx", "-y", "@me9rez/llm-vision-mcp", "mcp"]`。
 > 完整示例见 `examples/claude_code_settings.json`。
 
-**只启用部分工具**（减少 agent 上下文占用）→ 见「🎛️ 工具白名单（TOOLS）」。
+**只启用部分工具**（减少 agent 上下文占用）→ 见「工具白名单（TOOLS）」。
 
 **Opencode**（`%APPDATA%\opencode\opencode.json`）：
 
@@ -141,9 +141,9 @@ API_KEY=你的密钥 npx -y @me9rez/llm-vision-mcp analyze_image ./图片.png
 ```
 
 > 在 TUI 中运行 `/mcp` 查看连接状态；`/mcp-config` 可交互式增删改 server。接入后工具名为 `mcp__llm-vision-mcp__analyze_image` 格式，权限规则可用 `mcp__llm-vision-mcp__*` 通配。
-> 想限制 Kimi Code 可用的工具，除了本项目的 `TOOLS` / `--tools`（见「🎛️ 工具白名单」），还可以用 Kimi 原生的 `enabledTools` 白名单：在 server 条目中加 `"enabledTools": ["analyze_image", "extract_text"]`。
+> 想限制 Kimi Code 可用的工具，除了本项目的 `TOOLS` / `--tools`（见「工具白名单」），还可以用 Kimi 原生的 `enabledTools` 白名单：在 server 条目中加 `"enabledTools": ["analyze_image", "extract_text"]`。
 
-## 🎛️ 工具白名单（TOOLS）
+## 工具白名单（TOOLS）
 
 默认情况下 MCP Server 会注册全部 7 个工具，每个工具的定义（名称、参数、说明）都会占用 agent 的上下文 tokens。**只启用你实际需要的工具**能让上下文更小，模型响应更快、更省成本。
 
@@ -208,9 +208,9 @@ TOOLS=understand_diagram,analyze_chart
 
 ### 验证生效
 
-启动 MCP Server 后，在客户端执行 `tools/list` 即可核对：只启用 2 个工具时，列表里只会出现 `analyze_image` 和 `extract_text`。完整工具清单见「📋 MCP 工具列表」。
+启动 MCP Server 后，在客户端执行 `tools/list` 即可核对：只启用 2 个工具时，列表里只会出现 `analyze_image` 和 `extract_text`。完整工具清单见「MCP 工具列表」。
 
-## ⚙️ 环境变量
+## 环境变量
 
 支持任意 OpenAI 兼容的视觉模型供应商，全部通过环境变量配置：
 
@@ -221,7 +221,7 @@ TOOLS=understand_diagram,analyze_chart
 | `VISION_MODEL` | 否 | `Qwen/Qwen3-VL-8B-Instruct` | 视觉模型名（如 `Qwen/Qwen3-VL-235B-A22B-Instruct`） |
 | `TEMPERATURE` | 否 | `0.7` | 采样温度（数字，如 `0` / `0.5`） |
 | `MAX_TOKENS` | 否 | `32768` | 最大生成长度（正整数） |
-| `TOOLS` | 否 | （全部） | 工具白名单，逗号分隔（如 `analyze_image,extract_text`）；留空启用全部。**仅影响 MCP 模式**，详见「🎛️ 工具白名单」 |
+| `TOOLS` | 否 | （全部） | 工具白名单，逗号分隔（如 `analyze_image,extract_text`）；留空启用全部。**仅影响 MCP 模式**，详见「工具白名单」 |
 
 **配置其他供应商示例**（如本地 Ollama / vLLM 部署）：
 
@@ -243,18 +243,18 @@ TOOLS=understand_diagram,analyze_chart
 }
 ```
 
-## 🛡️ 安全
+## 安全
 
 - 本地 stdio 进程运行，不开放任何网络端口
 - 仅接受图片格式（`.png .jpg .jpeg .gif .webp .bmp`），防止 LLM 注入后读取任意文件
 - 文件大小限制 20MB，扩展名 + 魔数双重校验
 - 图片经 base64 编码发送至视觉模型供应商 API，参阅其隐私政策
 
-## 🙏 参考来源
+## 参考来源
 
 - [deepseek-eyes](https://github.com/Shaohan-He/deepseek-eyes)（MIT）— 本项目参考的原始项目：MCP Server + 通义千问VL，原项目为 Python 实现并含剪贴板工具；本项目以 Node.js 重写并移除了剪贴板工具
 - 视觉模型：通义千问VL / Qwen-VL via [ModelScope](https://modelscope.cn)
 
-## 📄 License
+## License
 
 MIT — 详见 [LICENSE](./LICENSE)
