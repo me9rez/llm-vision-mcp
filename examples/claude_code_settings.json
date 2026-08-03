@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "llm-vision-mcp": {
+      "command": "npx",
+      "args": ["-y", "@me9rez/llm-vision-mcp"],
+      "env": {
+        "API_KEY": "your_key_here"
+      }
+    }
+  }
+}

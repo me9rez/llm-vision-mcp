@@ -1,0 +1,12 @@
+{
+  "mcp": {
+    "llm-vision-mcp": {
+      "type": "local",
+      "command": ["npx", "-y", "@me9rez/llm-vision-mcp"],
+      "environment": {
+        "API_KEY": "your_key_here"
+      },
+      "enabled": true
+    }
+  }
+}
